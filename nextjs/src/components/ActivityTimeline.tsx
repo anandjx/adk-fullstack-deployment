@@ -1,3 +1,5 @@
+// nextjs/src/components/ActivityTimeline.tsx
+
 import {
   Card,
   CardContent,
@@ -37,8 +39,10 @@ export function ActivityTimeline({
   const [isTimelineCollapsed, setIsTimelineCollapsed] =
     useState<boolean>(false);
 
+  /* =========================================
+     DATA FORMATTERS (unchanged logic)
+     ========================================= */
   const formatEventData = (data: unknown): string => {
-    // Handle structured data types for single agent
     if (typeof data === "object" && data !== null && "type" in data) {
       const typedData = data as {
         type: string;
@@ -49,9 +53,11 @@ export function ActivityTimeline({
       };
       switch (typedData.type) {
         case "functionCall":
-          return `Calling function: ${
-            typedData.name
-          }\nArguments: ${JSON.stringify(typedData.args, null, 2)}`;
+          return `Calling function: ${typedData.name}\nArguments: ${JSON.stringify(
+            typedData.args,
+            null,
+            2
+          )}`;
         case "functionResponse":
           return `Function ${typedData.name} response:\n${JSON.stringify(
             typedData.response,
@@ -81,14 +87,11 @@ export function ActivityTimeline({
       }
     }
 
-    // Handle string data
     if (typeof data === "string") {
-      // Try to parse as JSON first
       try {
         const parsed = JSON.parse(data);
         return JSON.stringify(parsed, null, 2);
       } catch {
-        // If not JSON, return as string (could be markdown)
         return data;
       }
     } else if (Array.isArray(data)) {
@@ -100,21 +103,17 @@ export function ActivityTimeline({
   };
 
   const isJsonData = (data: unknown): boolean => {
-    // Handle structured data types
     if (typeof data === "object" && data !== null && "type" in data) {
       const typedData = data as { type: string };
-      // Thinking and sources should use markdown rendering
       if (typedData.type === "thinking" || typedData.type === "sources") {
-        return false; // Let ReactMarkdown handle this
+        return false;
       }
-      // Only function calls and responses should use JSON rendering
       return (
         typedData.type === "functionCall" ||
         typedData.type === "functionResponse"
       );
     }
 
-    // Check if string is JSON
     if (typeof data === "string") {
       try {
         JSON.parse(data);
@@ -123,11 +122,14 @@ export function ActivityTimeline({
         return false;
       }
     }
+
     return typeof data === "object" && data !== null;
   };
 
+  /* =========================================
+     ICON SELECTION
+     ========================================= */
   const getEventIcon = (title: string) => {
-    // Map different event types to icons for single agent
     if (title.includes("Function Call")) return <Code className="h-4 w-4" />;
     if (title.includes("Function Response"))
       return <FileText className="h-4 w-4" />;
@@ -145,11 +147,10 @@ export function ActivityTimeline({
   };
 
   const getEventColor = (title: string): string => {
-    // Color code different types of events
-    if (title.includes("Function Call")) return "text-blue-400";
-    if (title.includes("Function Response")) return "text-green-400";
+    if (title.includes("Function Call")) return "text-cyan-400";
+    if (title.includes("Function Response")) return "text-emerald-400";
     if (title.includes("Sources") || title.includes("Research"))
-      return "text-purple-400";
+      return "text-purple-300";
     if (title.includes("Planning") || title.includes("Strategy"))
       return "text-yellow-400";
     if (title.includes("Processing") || title.includes("Analysis"))
@@ -157,45 +158,52 @@ export function ActivityTimeline({
     if (title.includes("Writing") || title.includes("Report"))
       return "text-pink-400";
     if (title.includes("Thinking") || title.startsWith("🤔"))
-      return "text-cyan-400";
+      return "text-cyan-300";
     return "text-neutral-400";
   };
 
+  /* =========================================
+     RENDER
+     ========================================= */
   return (
     <div className="w-full mb-4">
-      <Card className="bg-neutral-900 border-neutral-700">
-        <CardHeader className="pb-3">
+      {/* Main glass card */}
+      <Card className="glass-card border-white/10">
+        <CardHeader className="pb-3 border-b border-white/5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-blue-400" />
-              <CardDescription className="text-neutral-300 font-medium">
+              <Activity className="h-5 w-5 text-cyan-300 glow-ring" />
+              <CardDescription className="text-neutral-300 font-medium tracking-wide">
                 AI Activity Timeline
               </CardDescription>
             </div>
+
             <button
               onClick={() => setIsTimelineCollapsed(!isTimelineCollapsed)}
-              className="p-1 hover:bg-neutral-700 rounded transition-colors"
+              className="p-1 rounded-md bg-white/[0.03] hover:bg-white/[0.07] backdrop-blur-md border border-white/[0.1]"
             >
               {isTimelineCollapsed ? (
-                <ChevronDown className="h-4 w-4 text-neutral-400" />
+                <ChevronDown className="h-4 w-4 text-neutral-300" />
               ) : (
-                <ChevronUp className="h-4 w-4 text-neutral-400" />
+                <ChevronUp className="h-4 w-4 text-neutral-300" />
               )}
             </button>
           </div>
         </CardHeader>
+
         {!isTimelineCollapsed && (
           <CardContent className="pt-0">
             <ScrollArea className="h-48">
-              <div className="space-y-2 pr-4">
+              <div className="space-y-3 pr-4">
                 {processedEvents.map((event, index) => (
                   <div
                     key={index}
-                    className="flex items-start gap-2 p-2 rounded-lg bg-neutral-800/50 border border-neutral-700/50"
+                    className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.04] border border-white/[0.06] backdrop-blur-xl"
                   >
                     <div className={`mt-0.5 ${getEventColor(event.title)}`}>
                       {getEventIcon(event.title)}
                     </div>
+
                     <div className="flex-1 min-w-0">
                       <div
                         className={`text-sm font-medium ${getEventColor(
@@ -204,9 +212,10 @@ export function ActivityTimeline({
                       >
                         {event.title}
                       </div>
+
                       <div className="text-xs text-neutral-400 mt-1">
                         {isJsonData(event.data) ? (
-                          <pre className="whitespace-pre-wrap font-mono text-xs">
+                          <pre className="whitespace-pre-wrap font-mono text-xs text-cyan-100/90">
                             {formatEventData(event.data)}
                           </pre>
                         ) : (
@@ -220,14 +229,18 @@ export function ActivityTimeline({
                     </div>
                   </div>
                 ))}
+
+                {/* Loader */}
                 {isLoading && (
-                  <div className="flex items-center gap-2 p-2 rounded-lg bg-neutral-800/30 border border-neutral-700/30">
-                    <Loader2 className="h-4 w-4 animate-spin text-blue-400" />
+                  <div className="flex items-center gap-2 p-3 rounded-lg bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
+                    <Loader2 className="h-4 w-4 animate-spin text-cyan-300" />
                     <div className="text-sm text-neutral-400">
                       AI is processing...
                     </div>
                   </div>
                 )}
+
+                {/* Empty State */}
                 {processedEvents.length === 0 && !isLoading && (
                   <div className="text-center py-4 text-neutral-500 text-sm">
                     Activity will appear here as the AI processes your request

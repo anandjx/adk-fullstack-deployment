@@ -1,14 +1,19 @@
+// C:\Users\anand\Deployementrepo\adk-fullstack-deploy-tutorial\nextjs\src\components\chat\ChatHeader.tsx
+
 "use client";
 
-import { Bot } from "lucide-react";
+import Image from "next/image";
 import { UserIdInput } from "@/components/chat/UserIdInput";
 import { SessionSelector } from "@/components/chat/SessionSelector";
 import { useChatContext } from "@/components/chat/ChatProvider";
 
 /**
- * ChatHeader - User and session management interface
- * Extracted from ChatMessagesView header section
- * Handles user ID input and session selection
+ * Intsemble Futuristic ChatHeader
+ * - Neon hologram background
+ * - Glowing animated brain logo
+ * - Neural pulse rings
+ * - Floating particles
+ * - Preserves ALL logic exactly
  */
 export function ChatHeader(): React.JSX.Element {
   const {
@@ -21,24 +26,64 @@ export function ChatHeader(): React.JSX.Element {
   } = useChatContext();
 
   return (
-    <div className="relative z-10 flex-shrink-0 border-b border-slate-700/50 bg-slate-800/80 backdrop-blur-sm">
-      <div className="max-w-5xl mx-auto w-full flex justify-between items-center p-4">
-        {/* Left side - App branding */}
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center shadow-md">
-            <Bot className="h-4 w-4 text-white" />
+    <div className="relative z-30 border-b border-white/10 overflow-hidden">
+
+      {/* =====================================================
+          Hologram Gradient Background + Particles
+          ===================================================== */}
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.35),rgba(0,0,0,0.65))] backdrop-blur-xl">
+        <div className="absolute inset-0 animate-holoFlow opacity-50"></div>
+      </div>
+
+      {/* Floating header particles */}
+      <div className="absolute inset-0 pointer-events-none opacity-40">
+        <div className="particle particle-cyan"></div>
+        <div className="particle particle-purple"></div>
+        <div className="particle particle-green"></div>
+      </div>
+
+      {/* =====================================================
+          HEADER CONTENT
+          ===================================================== */}
+      <div className="relative flex items-center justify-between max-w-6xl mx-auto py-4 px-4">
+
+        {/* LEFT SIDE — Branding */}
+        <div className="flex items-center gap-4">
+
+          {/* ============ Neon Brain Logo + Neural Pulses ============ */}
+          <div className="relative h-14 w-14 flex items-center justify-center">
+
+            {/* Neural Pulses */}
+            <div className="absolute inset-0 rounded-2xl neural-pulse-ring"></div>
+            <div className="absolute inset-0 rounded-2xl neural-pulse-ring2"></div>
+
+            {/* Logo Frame */}
+            <div className="h-14 w-14 rounded-2xl glass-strong overflow-hidden 
+                            relative border border-cyan-400/30 shadow-2xl animate-orbPulse">
+              <Image
+                src="/intsemble-brain.png"
+                alt="Intsemble Brain"
+                width={56}
+                height={56}
+                className="object-cover w-full h-full rounded-2xl logo-neon"
+              />
+            </div>
+
+            {/* Hologram Ring */}
+            <div className="absolute inset-0 rounded-2xl hologram-ring"></div>
           </div>
+
+          {/* Title Text */}
           <div>
-            <h1 className="text-lg font-semibold text-slate-100">
-              Goal Planning Assistant
+            <h1 className="text-xl font-semibold neon-text-cyan tracking-wide">
+              Flourish AI
             </h1>
-            <p className="text-xs text-slate-400">Powered by Google Gemini</p>
+            <p className="text-xs text-slate-400 italic">because every learner deserves a path</p>
           </div>
         </div>
 
-        {/* Right side - User controls */}
+        {/* RIGHT SIDE — User + Session Controls */}
         <div className="flex items-center gap-4">
-          {/* User ID Management */}
           <UserIdInput
             currentUserId={userId}
             onUserIdChange={handleUserIdChange}
@@ -46,7 +91,6 @@ export function ChatHeader(): React.JSX.Element {
             className="text-xs"
           />
 
-          {/* Session Management */}
           {userId && (
             <SessionSelector
               currentUserId={userId}

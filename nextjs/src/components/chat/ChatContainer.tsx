@@ -1,37 +1,24 @@
+// nextjs/src/components/chat/ChatContainer.tsx
 "use client";
 
-import { BackendHealthChecker } from "@/components/chat/BackendHealthChecker";
-import { ChatHeader } from "./ChatHeader";
 import { ChatContent } from "./ChatContent";
 import { ChatInput } from "./ChatInput";
+import { ChatHeader } from "./ChatHeader";
 
-/**
- * ChatLayout - Pure layout component for chat interface
- * Handles only UI structure and layout, no business logic
- * Uses context for all state management
- */
 export function ChatContainer(): React.JSX.Element {
   return (
-    <div className="h-screen flex flex-col bg-slate-900 relative">
-      <BackendHealthChecker>
-        {/* Fixed background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pointer-events-none"></div>
+    <div className="flex flex-col h-full bg-gradient-to-b from-[#05070c] via-[#0b0f19] to-[#05070c]">
+      <ChatHeader />
 
-        {/* Fixed Header - stays at top */}
-        <div className="relative z-10 flex-shrink-0">
-          <ChatHeader />
-        </div>
+      <div className="flex-1 overflow-y-auto relative">
+        <div className="absolute inset-0 bg-white/[0.02] backdrop-blur-xl pointer-events-none"></div>
 
-        {/* Scrollable Messages Area - takes remaining space */}
-        <div className="relative z-10 flex-1 min-h-0">
-          <ChatContent />
-        </div>
+        <ChatContent />
+      </div>
 
-        {/* Fixed Input Area - always at bottom */}
-        <div className="relative z-10 flex-shrink-0">
-          <ChatInput />
-        </div>
-      </BackendHealthChecker>
+      <div className="border-t border-white/10 bg-white/[0.05] backdrop-blur-xl p-3">
+        <ChatInput />
+      </div>
     </div>
   );
 }

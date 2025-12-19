@@ -1,20 +1,73 @@
+// "use client";
+
+// import { LandingHero } from "./LandingHero";
+// import { landingConfig } from "@/lib/landing-config";
+// import { useChatContext } from "./ChatProvider";
+// import { MessageList } from "./MessageList";
+// import { EmptyState } from "./EmptyState";
+
+// /**
+//  * ChatContent - now includes landing hero screen
+//  */
+// export function ChatContent(): React.JSX.Element {
+//   const { messages } = useChatContext();
+
+//   const hasMessages = messages && messages.length > 0;
+
+//   return (
+//     <div className="flex flex-col w-full h-full">
+
+//       {/* Landing Hero (only show when no messages yet) */}
+//       {!hasMessages && (
+//         <div className="flex justify-center w-full">
+//           <LandingHero
+//             title={landingConfig.title}
+//             subtitle={landingConfig.subtitle}
+//             features={landingConfig.features}
+//           />
+//         </div>
+//       )}
+
+//       {/* Message List (show AFTER first message) */}
+//       {hasMessages ? <MessageList /> : null}
+//     </div>
+//   );
+// }
+
 "use client";
 
-import { EmptyState } from "@/components/chat/EmptyState";
-import { MessageArea } from "@/components/chat/MessageArea";
-import { useChatContext } from "@/components/chat/ChatProvider";
+import { LandingHero } from "./LandingHero";
+import { landingConfig } from "@/lib/landing-config";
+import { useChatContext } from "./ChatProvider";
+import { MessageList } from "./MessageList";
 
-/**
- * ChatContent - Conditional rendering container
- * Shows EmptyState when no messages exist, MessageArea when messages are present
- * Handles the conditional logic that was in ChatMessagesView
- */
 export function ChatContent(): React.JSX.Element {
-  const { messages } = useChatContext();
+  // Fix: Extract ALL data needed for the message list from context
+  const { messages, messageEvents, isLoading, scrollAreaRef } = useChatContext();
+
+  const hasMessages = messages && messages.length > 0;
 
   return (
-    <div className={`h-full ${messages.length === 0 ? "flex" : ""}`}>
-      {messages.length === 0 ? <EmptyState /> : <MessageArea />}
+    <div className="flex flex-col w-full h-full">
+      {!hasMessages && (
+        <div className="flex justify-center w-full">
+          <LandingHero
+            title={landingConfig.title}
+            subtitle={landingConfig.subtitle}
+            features={landingConfig.features}
+          />
+        </div>
+      )}
+
+      {/* Fix: Pass the data as props to MessageList */}
+      {hasMessages ? (
+        <MessageList 
+          messages={messages} 
+          messageEvents={messageEvents} 
+          isLoading={isLoading} 
+          scrollAreaRef={scrollAreaRef}
+        />
+      ) : null}
     </div>
   );
 }

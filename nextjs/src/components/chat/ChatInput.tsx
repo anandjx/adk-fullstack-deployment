@@ -4,16 +4,30 @@ import { InputForm } from "@/components/InputForm";
 import { useChatContext } from "@/components/chat/ChatProvider";
 
 /**
- * ChatInput - Input form wrapper with context integration
- * Handles message submission through context instead of prop drilling
- * Extracted from ChatMessagesView input section
+ * Futuristic Intsemble ChatInput
+ * - Glassmorphic floating bar
+ * - Neon holo border
+ * - Animated glow effects
+ * - Upgraded to match the new Intsemble design system
  */
 export function ChatInput(): React.JSX.Element {
   const { handleSubmit, isLoading } = useChatContext();
 
   return (
-    <div className="relative z-10 flex-shrink-0 border-t-2 border-slate-600/80 bg-slate-900/95 backdrop-blur-md shadow-2xl shadow-black/40">
-      <div className="max-w-4xl mx-auto w-full p-4 pt-5">
+    <div
+      className="
+        relative z-30 flex-shrink-0 glass-panel backdrop-blur-2xl
+        border-t border-white/10 shadow-[0_-8px_32px_rgba(0,0,0,0.45)]
+      "
+    >
+      {/* Hologram animated strip */}
+      <div className="absolute inset-0 animate-holoFlow opacity-20 pointer-events-none"></div>
+
+      <div className="relative max-w-4xl mx-auto w-full p-5 pb-6">
+
+        {/* Futuristic glowing outline */}
+        <div className="absolute inset-0 rounded-2xl holo-outline pointer-events-none"></div>
+
         <InputForm
           onSubmit={handleSubmit}
           isLoading={isLoading}

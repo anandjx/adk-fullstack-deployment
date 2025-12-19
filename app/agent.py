@@ -12,7 +12,10 @@ root_agent = LlmAgent(
     model=config.model,
     description="An intelligent agent that takes goals and breaks them down into actionable tasks and subtasks with built-in planning capabilities.",
     planner=BuiltInPlanner(
-        thinking_config=genai_types.ThinkingConfig(include_thoughts=True)
+        thinking_config=genai_types.ThinkingConfig(
+                                                   include_thoughts=True,
+            thinking_budget=2048  # FIX: You must set a budget (e.g., 1024, 2048) to enable thinking
+        )
     ),
     instruction=f"""
     You are an intelligent goal planning and execution agent.
