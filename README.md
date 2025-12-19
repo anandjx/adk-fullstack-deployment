@@ -1,3 +1,6 @@
+This project extends bhancockio’s adk-fullstack-deploy-tutorial (https://github.com/bhancockio/adk-fullstack-deploy-tutorial.git
+) with custom modifications for seamless deployment on Vercel.
+
 # ADK Fullstack Deploy Tutorial
 
 Production-ready fullstack template showing how to wire a Python ADK backend to a modern Next.js frontend with streaming responses, local development, and deployment paths to Vertex AI Agent Engine and Vercel.
